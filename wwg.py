@@ -130,7 +130,7 @@ filename = os.path.split(inspect.getfile(inspect.currentframe()))
 parser = optparse.OptionParser('Usage: [+] Usage: ' + filename[1] + ' <args>' + '\n[+] Wikipedia Wordlist Generator\nURL must be formated as following (most subdomains should work): '
                                                                                 'http://en.wikipedia.org/wiki/wikipage\n\nExample: python %s -u http://en.wikipedia.org/wiki/Europe -o wordlist.txt -t 5'
                                                                                 '\n\nIt will generate close to no visible output.\nctrl+c to break\n\nI suggest doing something like this to clean the wordlist:'
-                                                                                ' cat wordlist.txt | sort | uniq > n_wordlist.txt' % filename[1])
+                                                                                ' sort -u wordlist.txt >> n_wordlist.txt' % filename[1])
 parser.add_option('-u', dest='starturl', type='string', help='Wikipedia URL to use as start for the crawler')
 parser.add_option('-t', dest='nrthreads', type='int', help='Amount of threads')
 parser.add_option('-o', dest='outputfile', type='string', help='File to write output to')
