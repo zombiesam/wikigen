@@ -156,6 +156,7 @@ while 1: # generate first crawl content
     if thread.isAlive():
         break
 
+int_count = 0
 while 1:
     if firstlayerqueue.empty():
         while 1:
@@ -165,10 +166,17 @@ while 1:
                 break
 
     if not firstlayerqueue.empty():
-        for i in range(4):
-            thread = Crawl(firstlayerqueue, secondlayerqueue)
-            thread.daemon = True
-            thread.start()
-        for i in range(4):
-            thread.join(10)
+        alivethread = 0
+        for i in range(nrthreads):
+            if not firstlayerqueue.empty():
+                alivethread += 1
+                thread = Crawl(firstlayerqueue, secondlayerqueue)
+                thread.daemon = True
+                thread.start()
+        for i in range(alivethread):
+            thread.join(5)
+        int_count += 1
+        if int_count == 3:
+            print 'Joined %i threads. Queue size: %i' % (alivethread, firstlayerqueue.qsize())
+            int_count = 0
         continue
