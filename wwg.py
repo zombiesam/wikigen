@@ -37,7 +37,7 @@ class Crawl(threading.Thread):
 
     def run(self):
         self.url = self.firstlayerqueue.get()
-        #print 'IN THREAD: ' + self.url   # uncomment to watch a lot of spam
+        #print 'IN THREAD: ' + self.url # uncomment to watch a lot of spam
         try:
             self.req = urllib2.Request(self.url, headers={'User-Agent' : "Mozilla/4.0(compatible; MSIE 7.0b; Windows NT 6.0)"}) # :)
             self.con = urllib2.urlopen( self.req )
@@ -58,7 +58,7 @@ class Crawl(threading.Thread):
         for line in self.data:
             try:
                 line_encoded = line.encode('ISO-8859-1')
-                #line_encoded = line.encode('UTF-8')          # might want to uncomment utf-8 and comment out ISO if you run into encoding problems
+                #line_encoded = line.encode('UTF-8') # might want to uncomment utf-8 and comment out ISO if you run into encoding problems
             except:
                 continue
             f = open(outputfile, 'a')
@@ -80,7 +80,7 @@ class Crawl(threading.Thread):
                     skip = False
                 if skip == True and word.find('<span class="mw-headline" id="References">'):
                     skip = True
-                #   'wtf does this even do?' can't remember... probably nothing
+                # 'wtf does this even do?' can't remember... probably nothing
                     pass
                 if len(word) >= 6 and len(word) <= 30 and skip == False:
                     for ban in banned:
@@ -114,7 +114,7 @@ class Crawl(threading.Thread):
                             self.urlvalue = reg.search(i).group(0)
                             self.urlvalue.replace('"', '')
                             self.urlvalue = str(URLVALUE) + str(self.urlvalue).strip('"')
-                            if self.urlvalue.endswith('.jpg') or self.urlvalue.endswith('.svg')  or self.urlvalue.endswith('.png') or self.urlvalue.endswith('.gif') :
+                            if self.urlvalue.endswith('.jpg') or self.urlvalue.endswith('.svg') or self.urlvalue.endswith('.png') or self.urlvalue.endswith('.gif') :
                                 pass
                             elif '/wiki/Wikipedia:' in self.urlvalue or '/wiki/Portal:' in self.urlvalue or '/wiki/Special:' in self.urlvalue or '%' in self.urlvalue or '/wiki/Template' in self.urlvalue:
                                 pass
@@ -128,26 +128,28 @@ class Crawl(threading.Thread):
 
 filename = os.path.split(inspect.getfile(inspect.currentframe()))
 parser = optparse.OptionParser('Usage: [+] Usage: ' + filename[1] + ' <args>' + '\n[+] Wikipedia Wordlist Generator\nURL must be formated as following (most subdomains should work): '
-                                                                                'http://en.wikipedia.org/wiki/wikipage\n\nExample: python %s -u http://en.wikipedia.org/wiki/Europe -o wordlist.txt'
+                                                                                'http://en.wikipedia.org/wiki/wikipage\n\nExample: python %s -u http://en.wikipedia.org/wiki/Europe -o wordlist.txt -t 5'
                                                                                 '\n\nIt will generate close to no visible output.\nctrl+c to break\n\nI suggest doing something like this to clean the wordlist:'
                                                                                 ' cat wordlist.txt | sort | uniq > n_wordlist.txt' % filename[1])
 parser.add_option('-u', dest='starturl', type='string', help='Wikipedia URL to use as start for the crawler')
+parser.add_option('-t', dest='nrthreads', type='int', help='Amount of threads')
 parser.add_option('-o', dest='outputfile', type='string', help='File to write output to')
-(options, args) = parser.parse_args()
 
+(options, args) = parser.parse_args()
+nrthreads = options.nrthreads
 starturl = options.starturl
 outputfile = options.outputfile
 
-if starturl == None or outputfile == None:
-    print parser.description()
-    quit()
+if starturl == None or outputfile == None or nrthreads == None:
+    print parser.print_help()
+    quit(0)
 
 words = 0
 URLVALUE = starturl.split('/wiki')[0]
 bad_urls = [bad_url.replace(bad_url, str(URLVALUE) + str(bad_url)) for bad_url in bad_urls]
 
 firstlayerqueue.put(starturl)
-while 1:  # generate first crawl content
+while 1: # generate first crawl content
     thread = Crawl(firstlayerqueue, secondlayerqueue)
     thread.daemon = True
     thread.start()
