@@ -130,14 +130,13 @@ def writeWords():
 			f.close()
 			words += 1
 		if wordqueue.empty():
-			print 'queue empty,m break'
 			break
 
 ##################
 def handler(signum, frame): # http://stackoverflow.com/questions/1112343/how-do-i-capture-sigint-in-python
 	global words, outputfile
 	if not wordqueue.empty():
-		print 'Hold on cowboy, let me finish the running threads and dump the words into %s' % outputfile
+		print '\nHold on cowboy, let me finish the running threads and dump the words into %s' % outputfile
 		writeWords()
 		print 'Done. Wrote %i words into %s' % (words, outputfile)
 			
