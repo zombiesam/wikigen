@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-# Coded by Sam (info@sam3.se)
+# Coded by Sam (alex@0xdeadcode.se)
+# http://0xdeadcode.se
+# Twitter: @_tmp0
 
 import threading, Queue, urllib2, StringIO, re, sys, os, optparse, inspect, signal
 reload(sys)
@@ -149,7 +151,7 @@ signal.signal(signal.SIGINT, handler)
 
 
 filename = os.path.split(inspect.getfile(inspect.currentframe()))
-parser = optparse.OptionParser('Usage: ' + filename[1] + ' <args>' + '\nWikipedia Wordlist Generator\nURL must be formated as following (most subdomains should work): '
+parser = optparse.OptionParser('Usage: ' + filename[1] + ' <args>' + '\nWikipedia Wordlist Generator by @_tmp0\nURL must be formated as following (most subdomains should work): '
                                                                                 'http://en.wikipedia.org/wiki/wikipage\n\nExample: python %s -u http://en.wikipedia.org/wiki/Europe -o wordlist.txt -t 5\nIf no minumum or max length is set the script will save words between 6 and 30 characters length'
                                                                                 '\n\nctrl+c to break\n\nI suggest doing something like this to clean the wordlist from duplicates:'
                                                                                 ' sort -u wordlist.txt >> n_wordlist.txt' % filename[1])
